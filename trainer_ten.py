@@ -55,6 +55,7 @@ class NinoTrainer:
             )
             acc = (self.ninoweight * cor).sum()
             rmse = torch.mean((y_pred - y_true) ** 2, dim=0).sqrt().sum()
+            print("Correlation (cor):", cor.item(), "acc:", acc.item(), "rmse:", rmse.item())
             sc = 2 / 3.0 * acc - rmse
         return sc.item()
 
