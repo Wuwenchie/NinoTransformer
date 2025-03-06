@@ -70,8 +70,10 @@ class NinoTestDataset(Dataset):
         out_field_y = np.zeros([ngroup, self.mypara.output_length, 2, field_data_out.shape[2], field_data_out.shape[3]])
         for j in range(ngroup):
             rd = random.randint(0, field_data_in.shape[0] - 1)
-            out_field_x[j] = field_data_in[rd]
-            out_field_y[j] = field_data_out[rd]
+            # out_field_x[j] = field_data_in[rd]
+            # out_field_y[j] = field_data_out[rd]
+            out_field_x[j] = field_data_in[rd:rd + self.mypara.input_length]
+            out_field_y[j] = field_data_out[rd:rd + self.mypara.output_length]
         return out_field_x, out_field_y
 
     def __len__(self):
