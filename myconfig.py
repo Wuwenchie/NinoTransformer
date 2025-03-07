@@ -34,9 +34,13 @@ mypara.input_length = 12
 mypara.output_length = 24
 mypara.lon_range = (0, 360)
 mypara.lat_range = (-50, 60)
+
 # nino34 region
-mypara.lon_nino_relative = (49, 75)
-mypara.lat_nino_relative = (15, 36)
+# mypara.lon_nino_relative = (49, 75)
+# mypara.lat_nino_relative = (15, 36)
+mypara.lon_nino_relative = (38, 48)
+mypara.lat_nino_relative = (6, 16)
+
 # patch size
 mypara.patch_size = (3, 4)
 # mypara.H0 = int((mypara.lat_range[1] - mypara.lat_range[0]) / mypara.patch_size[0])
