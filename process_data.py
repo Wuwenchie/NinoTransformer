@@ -14,19 +14,14 @@ def convert(file_path):
 
 
 def sperate_with_time(file_path, sel_time_start, sel_time_finish, path_new, output_filename):
-    # file_path = "./data/testing_data/SST/tos_Omon_GFDL-CM4_ssp245_r1i1p1f1_gn_201501-203412.nc"
     ds = xr.open_dataset(file_path)
     print(ds)
-    # print(ds["time"])
-    # print(ds['tos'])
     ds_subset = ds.sel(time=slice(sel_time_start, sel_time_finish))
     ds_subset.to_netcdf(path_new + output_filename)
     print(f"success sel time {sel_time_start} to {sel_time_finish}")
 
 
-# sperate_with_time()
 def nc_combine(file_paths, var, path_new, output_filename):
-    # file_paths = "C:/Users/miawu/nino/data/testing_data/SST/"       # 存放目標的檔案路徑
     # 定義一個空列表來儲存該文件里的.nc數據路徑
     dir_path = []
 
@@ -41,11 +36,7 @@ def nc_combine(file_paths, var, path_new, output_filename):
         data = xr.open_dataset(dir_path[i])[var]
         data_new.append(data)  ##儲存数据
     da = xr.concat(data_new, dim='time')  ##将數據以時間维度来進行拼接
-    # print(da)
     print("process...")
-
-    # path_new = "C:/Users/miawu/nino/data/testing_data/" ##设置新路径
-    # print(da.variable)
     da.to_netcdf(path_new + output_filename)  ##对拼接好的文件进行存储
     da.close()  ##关闭文件
     print(f"combine success to {output_filename}")
@@ -145,11 +136,6 @@ def norm(file_path, var, path_new, output_filename):
     print("calculating...")
     # Z-score 標準化
     sst_normalized = (data - mean) / std
-
-    # new_ds = xr.DataArray(sst_normalized,
-    #                 dims=['time', 'lat', 'lon'],
-    #                 coords={'time': ds['time'], 'lat': ds['lat'], 'lon': ds['lon']},
-    #                 name='sss')
 
     sst_normalized.to_netcdf(path_new + output_filename)
     print(f"success save data to {output_filename}")
