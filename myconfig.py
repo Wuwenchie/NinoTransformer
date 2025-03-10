@@ -38,15 +38,15 @@ mypara.lat_range = (-55, 59)
 # nino34 region
 # mypara.lon_nino_relative = (49, 75)
 # mypara.lat_nino_relative = (15, 36)
-mypara.lon_nino_relative = (38, 48)
-mypara.lat_nino_relative = (6, 16)
+mypara.lon_nino_relative = (130, 180)
+mypara.lat_nino_relative = (51, 61)
 
 # patch size
 mypara.patch_size = (3, 4)
 # mypara.H0 = int((mypara.lat_range[1] - mypara.lat_range[0]) / mypara.patch_size[0])
 # mypara.W0 = int((mypara.lon_range[1] - mypara.lon_range[0]) / mypara.patch_size[1])
-mypara.H0 = (23 - mypara.patch_size[0]) // mypara.patch_size[0] + 1  # 7
-mypara.W0 = (72 - mypara.patch_size[1]) // mypara.patch_size[1] + 1  # 17
+mypara.H0 = (115 - mypara.patch_size[0]) // mypara.patch_size[0] + 1  # 7
+mypara.W0 = (359 - mypara.patch_size[1]) // mypara.patch_size[1] + 1  # 17
 mypara.emb_spatial_size = mypara.H0 * mypara.W0
 
 # model
