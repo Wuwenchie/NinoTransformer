@@ -32,8 +32,8 @@ mypara.input_channal = 7  # n_lev of 3D temperature
 mypara.output_channal = 7
 mypara.input_length = 12
 mypara.output_length = 24
-mypara.lon_range = (0, 360)
-mypara.lat_range = (-50, 60)
+mypara.lon_range = (-299, 59)
+mypara.lat_range = (-55, 59)
 
 # nino34 region
 # mypara.lon_nino_relative = (49, 75)
