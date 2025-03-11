@@ -395,3 +395,6 @@ if __name__ == "__main__":
     eval_dataset = NinoTestDataset(mypara, ngroup=100)
     trainer = NinoTrainer(mypara)
     trainer.train_model(train_dataset, eval_dataset)
+
+
+# tensorboard --logdir=./runs/nino_trainer--6007
