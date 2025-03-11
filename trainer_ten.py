@@ -397,4 +397,4 @@ if __name__ == "__main__":
     trainer.train_model(train_dataset, eval_dataset)
 
 
-# tensorboard --logdir=./runs/nino_trainer--6007
+# tensorboard --logdir=./runs/nino_trainer --port=6007
