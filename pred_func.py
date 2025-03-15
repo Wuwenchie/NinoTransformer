@@ -21,15 +21,23 @@ class make_dataset_test(Dataset):
         self.lat_range = lat_range
 
         # 提取 SST 和 SSS
-        sst = data_in["sst"].values
-        sss = data_in["sss"].values
+        sst = data_in["sst"][
+            :,
+            mypara.lat_range[0]:mypara.lat_range[1],
+            mypara.lon_range[0]:mypara.lon_range[1],
+        ].values
+        sss = data_in["sss"][
+            :,
+            mypara.lat_range[0]:mypara.lat_range[1],
+            mypara.lon_range[0]:mypara.lon_range[1],
+        ].values
         sst = np.nan_to_num(sst)
         sss = np.nan_to_num(sss)
         sst[abs(sst) > 999] = 0
         sss[abs(sss) > 999] = 0
 
-        # 將 SST 和 SSS 合併為輸入數據 (C=2)
-        self.dataX = np.concatenate((sst[:, :, None], sss[:, :, None]), axis=2)  # (T, H, W, C)
+        # 將 SST 和 SSS 合併為輸入數據 (C=1)
+        self.dataX = np.stack([sst, sss], axis=1)  # (time, 2, lat, lon)
         del sst, sss
 
     def getdatashape(self):
@@ -39,7 +47,6 @@ class make_dataset_test(Dataset):
         return {
             "lon: {}E to {}E".format(self.lon[self.lon_range[0]], self.lon[self.lon_range[1] - 1]),
             "lat: {}S to {}N".format(self.lat[self.lat_range[0]], self.lat[self.lat_range[1] - 1]),
-            "lev: {}m to {}m".format(self.lev[self.lev_range[0]], self.lev[self.lev_range[1] - 1]),
         }
 
     def __len__(self):
@@ -56,13 +63,11 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     data_ori = xr.open_dataset(adr_oridata)
     sst_ori_region = data_ori["sst"][
         :,
-        mypara.lev_range[0]:mypara.lev_range[1],
         mypara.lat_range[0]:mypara.lat_range[1],
         mypara.lon_range[0]:mypara.lon_range[1],
     ].values
     sss_ori_region = data_ori["sss"][
         :,
-        mypara.lev_range[0]:mypara.lev_range[1],
         mypara.lat_range[0]:mypara.lat_range[1],
         mypara.lon_range[0]:mypara.lon_range[1],
     ].values
@@ -95,13 +100,13 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     mymodel.eval()
 
     # 預測輸出維度
-    n_lev = 2  # SST 和 SSS
-    sst_lev = 0  # SST 在通道 0
+    n_channels = 2  # SST 和 SSS
+    # sst_lev = 0  # SST 在通道 0
     var_pred = np.zeros(
         [
             test_group,
             lead_max,
-            n_lev,
+            n_channels,
             mypara.lat_range[1] - mypara.lat_range[0],
             mypara.lon_range[1] - mypara.lon_range[0],
         ]
@@ -144,11 +149,10 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
             cut_var_pred[
                 i,
                 :,
-                sst_lev,
                 mypara.lat_nino_relative[0]:mypara.lat_nino_relative[1],
                 mypara.lon_nino_relative[0]:mypara.lon_nino_relative[1],
             ],
-            axis=(1, 2),
+            axis=1,
         )
     assert cut_var_pred.shape[1] == cut_var_true.shape[0]
 
