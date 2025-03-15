@@ -160,14 +160,11 @@ def anomaly(file_path, var, sel_time_start, sel_time_finish, path_new, output_fi
     anomalies.to_netcdf(path_new + output_filename)
     print(f"successful save {output_filename}")
 
-
 def norm(file_path, var, path_new, output_filename, out_var):
-    # normalization data
-    # 讀取 NetCDF 檔案
+    """標準化數據並返回標準差"""
     ds = xr.open_dataset(file_path)
     print(ds)
-    # 提取 SSS 數據
-    data = ds[var].values  # 形狀: (time, lat, lon)
+    data = ds[var].values  # 形狀: (time, y, x)
     print("success loading data")
 
     # 計算均值和標準差（沿時間維度）
@@ -178,16 +175,32 @@ def norm(file_path, var, path_new, output_filename, out_var):
     std[std == 0] = 1e-6
 
     print("calculating...")
-    # Z-score 標準化
     sst_normalized = (data - mean) / std
 
+    # 創建新的 DataArray
     new_ds = xr.DataArray(sst_normalized,
-                    dims=['time', 'y', 'x'],
-                    coords={'time': ds['time'], 'y': ds['y'], 'x': ds['x']},
-                    name=out_var)
-
-    new_ds.to_netcdf(path_new + output_filename)
+                          dims=['time', 'y', 'x'],
+                          coords={'time': ds['time'], 'y': ds['y'], 'x': ds['x']},
+                          name=out_var)
+    
+    # 保存標準差作為附加變數
+    std_da = xr.DataArray(std,
+                          dims=['y', 'x'],
+                          coords={'y': ds['y'], 'x': ds['x']},
+                          name=f'std_{out_var}')
+    
+    # 合併數據和標準差
+    output_ds = xr.Dataset({out_var: new_ds, f'std_{out_var}': std_da})
+    output_ds.to_netcdf(path_new + output_filename)
     print(f"success save data to {output_filename}")
+    return output_ds
+
+def calculate_nino34(ds, var, lat_name='y', lon_name='x'):
+    """從 SST 數據中計算 Nino 3.4 指數"""
+    # Nino 3.4 區域: 5°S-5°N, 170°W-120°W
+    nino_ds = ds[var].sel({lat_name: slice(-5, 5), lon_name: slice(-170, -120)})
+    nino34 = nino_ds.mean(dim=[lat_name, lon_name], skipna=True)  # 空間平均，忽略 NaN
+    return nino34
 
 def merge(file_path_sss, file_path_sst, path_new, output_filename):
     # file_path_sss = path + "sss_norm_1850_2009.nc"
@@ -198,7 +211,21 @@ def merge(file_path_sss, file_path_sst, path_new, output_filename):
     ds_new.to_netcdf(path_new + output_filename)
     print(f"success merge data to {output_filename}")
 
-
+def merge_with_nino34(file_path_sss, file_path_sst, path_new, output_filename):
+    """合併 SST、SSS、Nino 3.4 和標準化參數"""
+    ds_sss = xr.open_dataset(file_path_sss)
+    ds_sst = xr.open_dataset(file_path_sst)
+    
+    # 從 SST 數據中計算 Nino 3.4
+    nino34 = calculate_nino34(ds_sst, 'sst')
+    nino34_da = xr.DataArray(nino34, dims=['time'], coords={'time': ds_sst['time']}, name='nino34')
+    
+    # 合併所有數據
+    ds_new = xr.merge([ds_sss, ds_sst, nino34_da])
+    ds_new.to_netcdf(path_new + output_filename)
+    print(f"success merge data to {output_filename}")
+    return ds_new
+    
 def training_data_pipeline():
     path = "./data/training_data/"
 
@@ -237,7 +264,6 @@ def training_data_pipeline():
 
 def testing_data_pipeline():
     path = "./data/testing_data/"
-    # path = "/home/g492/Downloads/wenchieh/nino/data/testing_data/"
     sss_dir = path + "SSS/"
     sst_dir = path + "SST/"
     
@@ -266,7 +292,7 @@ def testing_data_pipeline():
     anomaly(sss_interpolated_file, 'sos', '2010-01-16', '2024-12-16', sss_dir, 'sss_anomaly_2010_2024.nc')
     anomaly(sst_interpolated_file, 'tos', '2010-01-16', '2024-12-16', sst_dir, 'sst_anomaly_2010_2024.nc')
 
-    # 5. 標準化 (Normalization)
+    # 5. 標準化 (Normalization)   從這裡開始執行
     sss_anomaly_file = sss_dir + "sss_anomaly_2010_2024.nc"
     sst_anomaly_file = sst_dir + "sst_anomaly_2010_2024.nc"
     norm(sss_anomaly_file, 'sos', sss_dir, 'sss_norm_2010_2024.nc', 'sss')
@@ -275,9 +301,11 @@ def testing_data_pipeline():
     # 6. 合併 SST 和 SSS 數據
     sss_norm_file = sss_dir + "sss_norm_2010_2024.nc"
     sst_norm_file = sst_dir + "sst_norm_2010_2024.nc"
-    merge(sss_norm_file, sst_norm_file, path, 'GFDL-CM4_sss_sst_2010_2024.nc')
+    merge_with_nino34(sss_norm_file, sst_norm_file, path, 'GFDL-CM4_sss_sst_2010_2024.nc')
 
     print("Testing data Pipeline execution completed!")
 
-training_data_pipeline()
-testing_data_pipeline()
+# 執行流程
+if __name__ == "__main__":
+    training_data_pipeline()
+    testing_data_pipeline()
