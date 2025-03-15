@@ -21,19 +21,8 @@ class make_dataset_test(Dataset):
         self.lat_range = lat_range
 
         # 提取 SST 和 SSS
-        sst = data_in["sst"][
-            :,
-            :,
-            lat_range[0]:lat_range[1],
-            lon_range[0]:lon_range[1],
-        ].values
-        sss = data_in["salinityNor"][  # 假設數據集中有 salinityNor
-            :,
-            :,
-            lev_range[0]:lev_range[1],
-            lat_range[0]:lat_range[1],
-            lon_range[0]:lon_range[1],
-        ].values
+        sst = data_in["sst"].values
+        sss = data_in["sss"].values
         sst = np.nan_to_num(sst)
         sss = np.nan_to_num(sss)
         sst[abs(sst) > 999] = 0
@@ -65,13 +54,13 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 載入原始數據 (用於真值比對)
     data_ori = xr.open_dataset(adr_oridata)
-    sst_ori_region = data_ori["temperatureNor"][
+    sst_ori_region = data_ori["sst"][
         :,
         mypara.lev_range[0]:mypara.lev_range[1],
         mypara.lat_range[0]:mypara.lat_range[1],
         mypara.lon_range[0]:mypara.lon_range[1],
     ].values
-    sss_ori_region = data_ori["salinityNor"][
+    sss_ori_region = data_ori["sss"][
         :,
         mypara.lev_range[0]:mypara.lev_range[1],
         mypara.lat_range[0]:mypara.lat_range[1],
