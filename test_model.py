@@ -7,7 +7,7 @@ from matplotlib.ticker import MultipleLocator
 import os
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from my_tools import cal_ninoskill2, runmean
-from func_for_prediction import func_pre
+from pred_func import *
 
 mpl.use("Agg")
 plt.rc("font", family="Arial")
@@ -29,8 +29,8 @@ def file_name(file_dir):
 files = file_name("./model")
 file_num = len(files)
 lead_max = mypara.output_length
-adr_datain = "./data/GODAS_group_up150_temp_sss_8021_kb.nc"  # 假設數據集包含 SST 和 SSS
-adr_oridata = "./data/GODAS_up150m_temp_sss_nino_kb.nc"  # 假設原始數據包含 Nino34 和標準化值
+adr_datain = "./data/GFDL-CM4_sss_sst_1850_2009_5x5_1.nc"  # 假設數據集包含 SST 和 SSS
+adr_oridata = "./data/testing_data/GFDL-CM4_sss_sst_2010_2024_5x5_1.nc"  # 假設原始數據包含 Nino34 和標準化值
 
 # 評估每個模型
 for i_file in files[:file_num + 1]:
