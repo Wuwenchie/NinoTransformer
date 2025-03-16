@@ -79,6 +79,8 @@ class make_embedding(nn.Module):
 
 def unfold_func(in_data, kernel_size):
     n_dim = len(in_data.size())
+    print("in_data.shape:", in_data.shape)
+    print("kernel_size:", kernel_size)
     assert n_dim == 4 or n_dim == 5
     data1 = in_data.unfold(-2, size=kernel_size[0], step=kernel_size[0])
     data1 = data1.unfold(-2, size=kernel_size[1], step=kernel_size[1]).flatten(-2)
