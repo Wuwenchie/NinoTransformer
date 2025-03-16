@@ -85,8 +85,8 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     n_channels = 2  # SST 和 SSS
     var_pred = np.zeros(
         [
-            test_group,
-            lead_max,
+            test_group,      # 測試樣本數
+            lead_max,        # 預測的 lead time (時間步)
             n_channels,
             mypara.lat_range[1] - mypara.lat_range[0],
             mypara.lon_range[1] - mypara.lon_range[0],
