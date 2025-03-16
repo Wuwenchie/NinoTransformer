@@ -61,7 +61,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     # std_sss = np.nanmean(std_sss, axis=(1, 2))
 
     # 合併 SST 和 SSS 真值
-    var_ori_region = np.concatenate((sst_ori, sss_ori), axis=1)  # (T, C, H, W)
+    var_ori_region = np.stack((sst_ori, sss_ori), axis=1)  # (T, C, H, W)
     stds = np.concatenate((std_sst[None], std_sss[None]), axis=0)
     del sst_ori_region, sss_ori_region, std_sst, std_sss
 
