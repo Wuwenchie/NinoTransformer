@@ -83,7 +83,6 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 預測輸出維度
     n_channels = 2  # SST 和 SSS
-    # sst_lev = 0  # SST 在通道 0
     var_pred = np.zeros(
         [
             test_group,
