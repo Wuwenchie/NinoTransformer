@@ -52,8 +52,8 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 載入原始數據 (用於真值比對)
     data_ori = xr.open_dataset(adr_oridata)
-    sst_ori_region = data_ori["sst"].values
-    sss_ori_region = data_ori["sss"].values
+    sst_ori = data_ori["sst"].values
+    sss_ori = data_ori["sss"].values
     nino34 = data_ori["nino34"].values
     std_sst = data_ori["std_sst"].values
     # std_sst = np.nanmean(std_sst, axis=(1, 2))
@@ -61,7 +61,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     # std_sss = np.nanmean(std_sss, axis=(1, 2))
 
     # 合併 SST 和 SSS 真值
-    var_ori_region = np.concatenate((sst_ori_region[:, None], sss_ori_region[:, None]), axis=1)  # (T, C, H, W)
+    var_ori_region = np.concatenate((sst_ori, sss_ori), axis=1)  # (T, C, H, W)
     stds = np.concatenate((std_sst[None], std_sss[None]), axis=0)
     del sst_ori_region, sss_ori_region, std_sst, std_sss
 
