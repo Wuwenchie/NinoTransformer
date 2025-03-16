@@ -10,7 +10,6 @@ class make_dataset_test(Dataset):
     def __init__(
         self,
         address,
-        lev_range=(0, 1),
         lon_range=(0, 1),
         lat_range=(0, 1),
     ):
@@ -21,16 +20,8 @@ class make_dataset_test(Dataset):
         self.lat_range = lat_range
 
         # 提取 SST 和 SSS
-        sst = data_in["sst"][
-            :,
-            mypara.lat_range[0]:mypara.lat_range[1],
-            mypara.lon_range[0]:mypara.lon_range[1],
-        ].values
-        sss = data_in["sss"][
-            :,
-            mypara.lat_range[0]:mypara.lat_range[1],
-            mypara.lon_range[0]:mypara.lon_range[1],
-        ].values
+        sst = data_in["sst"].values
+        sss = data_in["sss"].values
         sst = np.nan_to_num(sst)
         sss = np.nan_to_num(sss)
         sst[abs(sst) > 999] = 0
@@ -61,21 +52,13 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 載入原始數據 (用於真值比對)
     data_ori = xr.open_dataset(adr_oridata)
-    sst_ori_region = data_ori["sst"][
-        :,
-        mypara.lat_range[0]:mypara.lat_range[1],
-        mypara.lon_range[0]:mypara.lon_range[1],
-    ].values
-    sss_ori_region = data_ori["sss"][
-        :,
-        mypara.lat_range[0]:mypara.lat_range[1],
-        mypara.lon_range[0]:mypara.lon_range[1],
-    ].values
+    sst_ori_region = data_ori["sst"].values
+    sss_ori_region = data_ori["sss"].values
     nino34 = data_ori["nino34"].values
-    std_sst = data_ori["stdtemp"][mypara.lev_range[0]:mypara.lev_range[1]].values
-    std_sst = np.nanmean(std_sst, axis=(1, 2))
-    std_sss = data_ori["stdsal"][mypara.lev_range[0]:mypara.lev_range[1]].values  # 假設有 stdsal
-    std_sss = np.nanmean(std_sss, axis=(1, 2))
+    std_sst = data_ori["std_sst"].values
+    # std_sst = np.nanmean(std_sst, axis=(1, 2))
+    std_sss = data_ori["std_sss"].values  # 假設有 stdsal
+    # std_sss = np.nanmean(std_sss, axis=(1, 2))
 
     # 合併 SST 和 SSS 真值
     var_ori_region = np.concatenate((sst_ori_region[:, None], sss_ori_region[:, None]), axis=1)  # (T, C, H, W)
@@ -85,7 +68,6 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     # 測試數據集
     dataCS = make_dataset_test(
         address=adr_datain,
-        lev_range=mypara.lev_range,
         lon_range=mypara.lon_range,
         lat_range=mypara.lat_range,
     )
