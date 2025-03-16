@@ -29,7 +29,7 @@ def file_name(file_dir):
 files = file_name("./model")
 file_num = len(files)
 lead_max = mypara.output_length
-adr_datain = "./data/GFDL-CM4_sss_sst_1850_2009_5x5_1.nc"  # 假設數據集包含 SST 和 SSS
+adr_datain = "./data/GFDL-CM4_sss_sst_2010_2024_5x5.nc"  # 假設數據集包含 SST 和 SSS
 adr_oridata = "./data/testing_data/GFDL-CM4_sss_sst_2010_2024_5x5_1.nc"  # 假設原始數據包含 Nino34 和標準化值
 
 # 評估每個模型
