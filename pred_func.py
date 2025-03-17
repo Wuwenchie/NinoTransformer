@@ -43,10 +43,12 @@ class make_dataset_test(Dataset):
         }
 
     def __len__(self):
-        return self.dataX.shape[0] - self.input_length  # 確保有足夠的時間步
+        return self.dataX.shape[0]
+        # return self.dataX.shape[0] - self.input_length  # 確保有足夠的時間步
 
     def __getitem__(self, idx):
-        return self.dataX[idx:idx + self.input_length]  # (T=12, C, H, W)
+        return self.dataX[idx]
+        # return self.dataX[idx:idx + self.input_length]  # (T=12, C, H, W)
 
 
 def func_pre(mypara, adr_model, adr_datain, adr_oridata):
@@ -100,7 +102,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     iii = 0
     with torch.no_grad():
         for input_var in dataloader_test:
-            input_var = input_var.float().to(mypara.device).permute(0, 3, 1, 2)  # (B, C, H, W)
+            # input_var = input_var.float().to(mypara.device).permute(0, 3, 1, 2)  # (B, C, H, W)
             input_var = input_var.unsqueeze(1)  # (B, T=1, C, H, W) 假設單一時間步輸入
             out_var = mymodel(input_var, predict_tar=None, train=False)  # (B, T, C, H, W)
             ii += out_var.shape[0]
