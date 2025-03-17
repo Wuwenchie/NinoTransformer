@@ -66,7 +66,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 合併 SST 和 SSS 真值
     var_ori_region = np.stack((sst_ori, sss_ori), axis=1)  # (T, C, H, W)
-    stds = np.concatenate((std_sst[None], std_sss[None]), axis=0)
+    stds = np.stack((std_sst[None], std_sss[None]), axis=0)
     del sst_ori_region, sss_ori_region, std_sst, std_sss
 
     # 測試數據集
@@ -102,7 +102,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     iii = 0
     with torch.no_grad():
         for input_var in dataloader_test:
-            # input_var = input_var.float().to(mypara.device).permute(0, 3, 1, 2)  # (B, C, H, W)
+            input_var = input_var.float().to(mypara.device)      # (B, C, H, W)
             input_var = input_var.unsqueeze(1)  # (B, T=1, C, H, W) 假設單一時間步輸入
             out_var = mymodel(input_var, predict_tar=None, train=False)  # (B, T, C, H, W)
             ii += out_var.shape[0]
@@ -115,11 +115,11 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
 
     # 數據後處理
     len_data = test_group - lead_max
-    print("len_data:", len_data)
+    print("len_data:", len_data)    # len_data: 1896
 
     # 真值
     cut_var_true = var_ori_region[(12 + lead_max) - 1:] * stds[None, :, None, None]
-    cut_nino_true = nino34[(12 + lead_max) - 1:]
+    cut_nino_true = nino34[(12 + lead_max) - 1:]    # cut_nino_true shape (145,)
     assert cut_nino_true.shape[0] == cut_var_true.shape[0] == len_data
 
     # 預測值
@@ -142,3 +142,18 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata):
     assert cut_var_pred.shape[1] == cut_var_true.shape[0]
 
     return cut_var_pred, cut_var_true, cut_nino_pred, cut_nino_true
+
+
+"""
+nino shape: (180,)
+std_sst shape: (23, 72)
+std_sss shape: (23, 72)
+stds shape before None: (2, 23, 72)
+stds shape after None: (1, 2, 1, 1, 23, 72)
+var_ori_region shape: (145, 2, 23, 72)
+{'dataX.shape': (1920, 2, 23, 72)}
+{'lon: 61E to 56E', 'lat: -55S to 55N'}
+cut_var_true shape: (1, 2, 145, 2, 23, 72)
+cut_nino_true shape (145,)
+len_data: 1896
+"""
