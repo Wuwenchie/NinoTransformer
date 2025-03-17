@@ -12,12 +12,14 @@ class make_dataset_test(Dataset):
         address,
         lon_range=(0, 1),
         lat_range=(0, 1),
+        input_length=12,  # 增加一個變量來控制時間步數
     ):
         data_in = xr.open_dataset(address)
         self.lat = data_in["y"].values
         self.lon = data_in["x"].values
         self.lon_range = lon_range
         self.lat_range = lat_range
+        self.input_length = input_length  # 記錄輸入長度
 
         # 提取 SST 和 SSS
         sst = data_in["sst"].values
@@ -41,10 +43,10 @@ class make_dataset_test(Dataset):
         }
 
     def __len__(self):
-        return self.dataX.shape[0]
+        return self.dataX.shape[0] - self.input_length  # 確保有足夠的時間步
 
     def __getitem__(self, idx):
-        return self.dataX[idx]
+        return self.dataX[idx:idx + self.input_length]  # (T=12, C, H, W)
 
 
 def func_pre(mypara, adr_model, adr_datain, adr_oridata):
