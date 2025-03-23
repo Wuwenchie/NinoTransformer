@@ -10,7 +10,7 @@ from my_tools import cal_ninoskill2, runmean
 from pred_func import *
 
 mpl.use("Agg")
-plt.rc("font", family="Arial")
+plt.rc("font", family="sans-serif")
 mpl.rc("image", cmap="RdYlBu_r")
 plt.rcParams["xtick.direction"] = "in"
 plt.rcParams["ytick.direction"] = "in"
@@ -29,8 +29,8 @@ def file_name(file_dir):
 files = file_name("./model")
 file_num = len(files)
 lead_max = mypara.output_length
-adr_datain = "./data/GFDL-CM4_sss_sst_2010_2024_5x5.nc"  # 假設數據集包含 SST 和 SSS
-adr_oridata = "./data/testing_data/GFDL-CM4_sss_sst_2010_2024_5x5_1.nc"  # 假設原始數據包含 Nino34 和標準化值
+adr_datain = "./data/GFDL-CM4_sss_sst_2010_2024_5x5_5.nc"  # 假設數據集包含 SST 和 SSS
+adr_oridata = "./data/testing_data/GFDL-CM4_sss_sst_2010_2024_5x5_5.nc"  # 假設原始數據包含 Nino34 和標準化值
 
 # 評估每個模型
 for i_file in files[:file_num + 1]:
@@ -80,7 +80,9 @@ for i_file in files[:file_num + 1]:
     ax1.legend(loc="lower left", ncol=3, fontsize=5)
 
     # 計算 Nino 技能分數並繪製等高線圖
-    long_eval_yr = 2021 - 1983 + 1
+    # long_eval_yr = 2021 - 1983 + 1
+    long_eval_yr = 2024 - 2010 + 1 - 12
+
     cut_nino_true_jx = runmean(cut_nino_true_jx, 3)
     for l in range(lead_max):
         cut_nino_pred_jx[l] = runmean(cut_nino_pred_jx[l], 3)
