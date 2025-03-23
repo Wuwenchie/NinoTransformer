@@ -74,7 +74,10 @@ class NinoGeoformer(nn.Module):
             predict_tar = predictor[:, -1:]
             for t in range(self.mypara.output_length):
                 out_mask = self.make_mask_matrix(predict_tar.size(1))
+                print("out_mask shape:", out_mask.shape)   # 新增
+                print("out_mask sample:", out_mask[-5:, -5:]) # 新增
                 outvar_pred = self.decode(predict_tar, en_out, out_mask, enout_mask)
+                print(f"Step {t}, outvar_pred[:, -1:] sample:", outvar_pred[:, -1:, 0, :5, :5])  # 新增
                 predict_tar = torch.cat([predict_tar, outvar_pred[:, -1:]], dim=1)
         return outvar_pred
 
