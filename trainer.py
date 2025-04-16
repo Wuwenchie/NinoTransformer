@@ -79,12 +79,12 @@ class NinoTrainer:
         nino_true = []
         var_true = []
         with torch.no_grad():
-            for input_var, var_true in dataloader:
+            for input_var, var_true1 in dataloader:
                 input_var = input_var.float().to(self.device)
-                var_true = var_true.float().to(self.device)
+                var_true1 = var_true1.float().to(self.device)
                 out_var = self.model(input_var, predict_tar=None, train=False)  # (B, T, C, H, W)
                 # 提取 SST 並計算 Nino 指數
-                SST_true = var_true[:, :, self.sstlevel]  # (B, T, H, W)
+                SST_true = var_true1[:, :, self.sstlevel]  # (B, T, H, W)
                 nino_true1 = SST_true[
                     :, :, self.mypara.lat_nino_relative[0]:self.mypara.lat_nino_relative[1],
                     self.mypara.lon_nino_relative[0]:self.mypara.lon_nino_relative[1]
@@ -94,7 +94,7 @@ class NinoTrainer:
                     :, :, self.mypara.lat_nino_relative[0]:self.mypara.lat_nino_relative[1],
                     self.mypara.lon_nino_relative[0]:self.mypara.lon_nino_relative[1]
                 ].mean(dim=[2, 3])  # (B, T)
-                var_true.append(var_true)
+                var_true.append(var_true1)
                 nino_true.append(nino_true1)
                 var_pred.append(out_var)
                 nino_pred.append(nino_pred1)
