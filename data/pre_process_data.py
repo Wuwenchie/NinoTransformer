@@ -572,8 +572,7 @@ def training_data_pipeline():
     sss_inter_dir = './data/training_data/sss_inter/'
     sst_inter_dir = './data/training_data/sst_inter/'
 
-    # nc_combine(sss_dir, 'sos', path, 'sos_1850_2014.nc')
-    # nc_combine(sst_dir, 'tos', path, 'tos_1850_2014.nc')
+    nc_combine(sss_dir, 'sos', path, 'sos_1850_2014.nc')
     # 1. 經度轉換(平移)
     sss_path = path + 'sos_1850_2009.nc'
     sst_path = path + 'tos_1850_2009.nc'
@@ -673,8 +672,8 @@ def testing_data_pipeline():
     # print(ds)
 
     # 2. 合併 SSS/SST 檔案
-    # nc_combine(sss_dir, 'sos', path, "sss_2010_2024.nc")
-    # nc_combine(sst_dir, 'tos', path, "sst_2010_2024.nc")
+    nc_combine(sss_dir, 'sos', path, "sss_2010_2024.nc")
+    nc_combine(sst_dir, 'tos', path, "sst_2010_2024.nc")
 
     # 1. 經度轉換(平移)
     sss_path = path + 'sss_2010_2024.nc'
@@ -833,14 +832,6 @@ if __name__ == "__main__":
     path_all = './data/all_data/'
     sss_norm_file = './data/testing_data/sss_norm_2010_2024.nc'
     sst_norm_file = './data/testing_data/sst_norm_2010_2024.nc'
-    file_conf = './SODA_ORAS_group_temp_tauxy_before1979_kb.nc'
-    file_conf_1 = './data/CMIP6_separate_model_up150m_tauxy_Nor_kb.nc'
-    file_conf_2 = './data/GODAS_group_up150_temp_tauxy_8021_kb.nc'
-    file_conf_3 = './data/GODAS_up150m_temp_nino_tauxy_kb-1670841778160.nc'
-    file_train = './data/all_data/GFDL-CM4_sss_sst_nino_1850_2024.nc'
-    file_eval = './data/all_data/test_dataset/GFDL-CM4_test_1977_2009.nc'
-    file_test = './data/all_data/GFDL-CM4_sss_sst_2010_2024_1.nc'
-    file_test_1 = './data/all_data/GFDL-CM4_sss_sst_nino_2010_2024_1.nc'
 
     all_data()
     sperate_with_time("./data/all_data/GFDL-CM4_sss_sst_nino_1850_2024.nc", '1850-01', '1989-12', path_all, 'GFDL-CM4_sss_sst_1850_1989.nc')
@@ -848,50 +839,4 @@ if __name__ == "__main__":
     train_data_speration()
     # re_dataset("GFDL-CM4_sss_sst_nino_2010_2024.nc", path_all, "GFDL-CM4_sss_sst_nino_2010_2024_1.nc")
     # test_data_speration("GFDL-CM4_sss_sst_nino_2010_2024.nc", path_all, "GFDL-CM4_sss_sst_2010_2024_1.nc")
-
-    # ds = xr.open_dataset(file_test)
-    # ds_1 = xr.open_dataset(file_test_1)
-    # # print(ds)
-    # print(ds_1)
-    # nino = ds_1['nino34'].values
-    # sst = ds_1['temperatureNor'].values
-    # sss = ds_1['sssNor'].values
-    # stdtemp = ds_1['stdtemp'].isel(lev=0).values
-    # print("nino_ori_region contains NaN:", np.any(np.isnan(nino)))
-    # print("sst_ori_region contains NaN:", np.any(np.isnan(sst)))
-    # print("sss_ori_region contains NaN:", np.any(np.isnan(sss)))
-    # print(nino.min(), nino.max())
-    # # print(ds['nino34'].isel(n_model=0, n_mon=2010))
-    # print(stdtemp.min(), stdtemp.max())
-
-    # all_data()
-    # test_data_speration()
-
-    # new_ds = ds.fillna(0.0)
-    # new_ds.to_netcdf(os.path.join(path_test, 'GFDL-CM4_sss_sst_2010_2024_1.nc'))
-    # plot_dataset(ds)
-    # sst_ori_region = ds['tos'].values
-    # print("sst_ori_region contains NaN:", np.any(np.isnan(sst_ori_region)))
-
-    # training_data_pipeline()
-    # testing_data_pipeline()
-    # test_data_speration()
-    # ds_sss = xr.open_dataset(sss_norm_file)
-    # ds_sst = xr.open_dataset(sst_norm_file)
-    # print(ds_sss)
-    # print(ds_sst)
-    # merge_with_nino34(sss_norm_file, sst_norm_file, path, 'GFDL-CM4_sss_sst_2010_2024.nc')
-    # testing_data_pipeline()
-    file = './data/testing_data/GFDL-CM4_sss_sst_2010_2024.nc'
-    file_1 = './data/training_data/GFDL-CM4_data_1850_1976.nc'
-    file_2 = './data/training_data/GFDL-CM4_data_1977_2009.nc'
-
-    data = path + 'GFDL-CM4_sss_sst_1850_2009.nc'
-    output_filename = 'GFDL-CM4_sss_sst_2010_2024.nc'
-    # sperate_with_time(data, '1977-01', '2009-12', path, output_filename)
-    
-
-
-
-
 
