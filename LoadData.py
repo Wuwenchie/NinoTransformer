@@ -50,7 +50,7 @@ class make_dataset1(Dataset):
             )  # [n_model,mon,lev,lat,lon]
             del temp, taux, tauy
         elif mypara.need_sss_tauxy:
-            print("loading tauxy fields")
+            print("loading sss tauxy fields")
             taux = data_in["tauxNor"][
                 :,
                 :,
@@ -209,7 +209,7 @@ class make_dataset2(IterableDataset):
             )
             del temp, taux, tauy
         elif mypara.need_sss_tauxy:
-            print("loading tauxy fields")
+            print("loading sss tauxy fields")
             taux = data_in["tauxNor"][
                 :,
                 :,
