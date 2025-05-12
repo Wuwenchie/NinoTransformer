@@ -29,23 +29,17 @@ mypara.adr_eval = (
     "./data/training_data/GFDL-CM4_sss_sst_1977_2009.nc"
 )
 mypara.needtauxy = True
-mypara.input_channels = 2  # input channels = SSS + SST
+mypara.need_sss_tauxy = True
 mypara.input_channal = 7  # n_lev of 3D temperature
 mypara.output_channal = 7
 mypara.input_length = 12
-mypara.output_length = 24
-# mypara.lon_range = (0, 356)
-# mypara.lat_range = (-55, 60)
-mypara.lon_range = (0, 72)  # 1E ~ 356E
-mypara.lat_range = (0, 23)  # -55S ~ 60N
-# mypara.lon_range = (-299, 59)
-# mypara.lat_range = (-55, 59)
-
+mypara.output_length = 20
+mypara.lev_range = (1, 8)
+mypara.lon_range = (45, 165)
+mypara.lat_range = (0, 51)
 # nino34 region
-# mypara.lon_nino_relative = (26, 37) # 190E ~ 240E
-# mypara.lat_nino_relative = (10, 13)  # -5S ~ 5N
-mypara.lon_nino_relative = (26, 37)
-mypara.lat_nino_relative = (10, 13)
+mypara.lon_nino_relative = (49, 75)
+mypara.lat_nino_relative = (15, 36)
 
 # patch size
 mypara.patch_size = (3, 4)
