@@ -46,7 +46,7 @@ class modelTrainer:
         self.sstlevel = 0
         if self.mypara.needtauxy:
             self.sstlevel = 2
-        elif self.mypara.need_sss_tauxy:
+        elif self.mypara.need_sss_tauxy:        # 如果想加上 sss 作為輸入變數
             self.sstlevel = 3
         ninoweight = torch.from_numpy(
             np.array([1.5] * 4 + [2] * 7 + [3] * 7 + [4] * 6)
