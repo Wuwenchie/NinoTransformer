@@ -321,23 +321,26 @@ class make_testdataset(Dataset):
             ].values
             taux_in = np.nan_to_num(taux_in)
             taux_in[abs(taux_in) > 999] = 0
-            tauy = data_in["tauyNor"][
+            tauy_in = data_in["tauyNor_in"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
                 mypara.lon_range[0] : mypara.lon_range[1],
             ].values
-            tauy = np.nan_to_num(tauy)
-            tauy[abs(tauy) > 999] = 0
-            sss = data_in["sssNor"][
+            tauy_in = np.nan_to_num(tauy_in)
+            tauy_in[abs(tauy_in) > 999] = 0
+            sss_in = data_in["sssNor_in"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
                 mypara.lon_range[0] : mypara.lon_range[1],
             ].values
-            sss = np.nan_to_num(sss)
-            sss[abs(sss) > 999] = 0
-            del temp, taux, tauy, sss
+            sss_in = np.nan_to_num(sss_in)
+            sss_in[abs(sss_in) > 999] = 0
+            field_data_in = np.concatenate(
+                (taux_in[:, :, None], tauy_in[:, :, None], sss_in[:, :, None], temp_in), axis=2
+            )
+            del temp_in, taux_in, tauy_in, sss_in
         else:
             field_data_in = temp_in
             del temp_in
@@ -521,6 +524,36 @@ class make_TFdataset(Dataset):
                 (taux_in[:, :, None], tauy_in[:, :, None], temp_in), axis=2
             )
             del temp_in, taux_in, tauy_in
+        elif mypara.needtauxy:
+            print("loading sss tauxy...")
+            taux_in = data_in["tauxNor_in"][
+                :,
+                :,
+                self.lat_range[0] : self.lat_range[1],
+                self.lon_range[0] : self.lon_range[1],
+            ].values
+            taux_in = np.nan_to_num(taux_in)
+            taux_in[abs(taux_in) > 999] = 0
+            tauy_in = data_in["tauyNor_in"][
+                :,
+                :,
+                self.lat_range[0] : self.lat_range[1],
+                self.lon_range[0] : self.lon_range[1],
+            ].values
+            tauy_in = np.nan_to_num(tauy_in)
+            tauy_in[abs(tauy_in) > 999] = 0
+            sss_in = data_in["sssNor_in"][
+                :,
+                :,
+                self.lat_range[0] : self.lat_range[1],
+                self.lon_range[0] : self.lon_range[1],
+            ].values
+            sss_in = np.nan_to_num(sss_in)
+            sss_in[abs(sss_in) > 999] = 0
+            field_data_in = np.concatenate(
+                (taux_in[:, :, None], tauy_in[:, :, None], sss_in[:, :, None], temp_in), axis=2
+            )
+            del temp_in, taux_in, tauy_in, sss_in
         else:
             field_data_in = temp_in
             del temp_in
@@ -575,7 +608,7 @@ class make_TFdataset(Dataset):
                 self.lon_range[0] : self.lon_range[1],
             ].values
             tauy_out = np.nan_to_num(tauy_out)
-            sss_out[abs(sss_out) > 999] = 0
+            tauy_out[abs(tauy_out) > 999] = 0
             sss_out = data_in["sssNor_out"][
                 :,
                 :,
