@@ -50,7 +50,7 @@ class make_dataset1(Dataset):
             )  # [n_model,mon,lev,lat,lon]
             del temp, taux, tauy
         elif mypara.need_sss_tauxy:
-            print("loading sss tauxy fields")
+            print("loading sss and tauxy fields")
             taux = data_in["tauxNor"][
                 :,
                 :,
@@ -209,7 +209,7 @@ class make_dataset2(IterableDataset):
             )
             del temp, taux, tauy
         elif mypara.need_sss_tauxy:
-            print("loading sss tauxy fields")
+            print("loading sss and tauxy fields")
             taux = data_in["tauxNor"][
                 :,
                 :,
@@ -312,7 +312,7 @@ class make_testdataset(Dataset):
             )
             del temp_in, taux_in, tauy_in
         elif mypara.need_sss_tauxy:
-            print("loading sss tauxy fields")
+            print("loading sss and tauxy fields")
             taux_in = data_in["tauxNor_in"][
                 :,
                 :,
@@ -379,7 +379,7 @@ class make_testdataset(Dataset):
             )
             del temp_out, taux_out, tauy_out
         elif mypara.need_sss_tauxy:
-            print("loading tauxy fields")
+            print("loading sss and tauxy fields")
             taux_out = data_in["tauxNor_out"][
                 :,
                 :,
@@ -525,7 +525,7 @@ class make_TFdataset(Dataset):
             )
             del temp_in, taux_in, tauy_in
         elif mypara.needtauxy:
-            print("loading sss tauxy...")
+            print("loading sss and tauxy...")
             taux_in = data_in["tauxNor_in"][
                 :,
                 :,
@@ -592,7 +592,7 @@ class make_TFdataset(Dataset):
             )  # [group,lb,all_lev,lat,lon]
             del temp_out, taux_out, tauy_out
         elif mypara.need_sss_tauxy:
-            print("loading sss tauxy...")
+            print("loading sss and tauxy...")
             taux_out = data_in["tauxNor_out"][
                 :,
                 :,
