@@ -28,7 +28,7 @@ mypara.all_group = 13000
 mypara.adr_eval = (
     "./data/training_data/GFDL-CM4_sss_sst_1977_2009.nc"
 )
-mypara.needtauxy = True
+# mypara.needtauxy = True
 mypara.need_sss_tauxy = True
 mypara.input_channal = 7  # n_lev of 3D temperature
 mypara.output_channal = 7
