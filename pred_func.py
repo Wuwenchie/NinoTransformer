@@ -72,7 +72,7 @@ class make_dataset_test(Dataset):
             ].values
             tauy = np.nan_to_num(tauy)
             tauy[abs(tauy) > 999] = 0
-            sss = data_in["sssNor"][
+            sss = data_in["salinityNor"][
                 :,
                 :,
                 lat_range[0] : lat_range[1],
@@ -177,7 +177,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata, needtauxy, need_sss_tau
             mypara.lat_range[0] : mypara.lat_range[1],
             mypara.lon_range[0] : mypara.lon_range[1],
         ].values
-        sss_ori_region = data_ori["sssNor"][
+        sss_ori_region = data_ori["salinityNor"][
             :,
             mypara.lat_range[0] : mypara.lat_range[1],
             mypara.lon_range[0] : mypara.lon_range[1],
@@ -186,7 +186,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata, needtauxy, need_sss_tau
         stdtaux = np.nanmean(stdtaux, axis=(0, 1))
         stdtauy = data_ori["stdtauy"].values
         stdtauy = np.nanmean(stdtauy, axis=(0, 1))
-        stdsss = data_ori["stdsss"].values
+        stdsss = data_ori["stdsalinity"].values
         stdsss = np.nanmean(stdsss, axis=(0, 1))
         # ---------
         print("taux:", taux_ori_region[:,None].shape)
@@ -230,7 +230,7 @@ def func_pre(mypara, adr_model, adr_datain, adr_oridata, needtauxy, need_sss_tau
         sst_lev = 2
     elif need_sss_tauxy:
         n_lev = mypara.lev_range[1] - mypara.lev_range[0] + 3
-        sst_lev = 3
+        sst_lev = 9
     else:
         n_lev = mypara.lev_range[1] - mypara.lev_range[0]
         sst_lev = 0
