@@ -67,7 +67,7 @@ class make_dataset1(Dataset):
             ].values
             tauy = np.nan_to_num(tauy)
             tauy[abs(tauy) > 999] = 0
-            sss = data_in["sssNor"][
+            sss = data_in["salinityNor"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
@@ -226,7 +226,7 @@ class make_dataset2(IterableDataset):
             ].values
             tauy = np.nan_to_num(tauy)
             tauy[abs(tauy) > 999] = 0
-            sss = data_in["sssNor"][
+            sss = data_in["salinityNor"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
@@ -329,7 +329,7 @@ class make_testdataset(Dataset):
             ].values
             tauy_in = np.nan_to_num(tauy_in)
             tauy_in[abs(tauy_in) > 999] = 0
-            sss_in = data_in["sssNor_in"][
+            sss_in = data_in["salinityNor_in"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
@@ -396,7 +396,7 @@ class make_testdataset(Dataset):
             ].values
             tauy_out = np.nan_to_num(tauy_out)
             tauy_out[abs(tauy_out) > 999] = 0
-            sss_out = data_in["sssNor_out"][
+            sss_out = data_in["salinityNor_out"][
                 :,
                 :,
                 mypara.lat_range[0] : mypara.lat_range[1],
@@ -542,7 +542,7 @@ class make_TFdataset(Dataset):
             ].values
             tauy_in = np.nan_to_num(tauy_in)
             tauy_in[abs(tauy_in) > 999] = 0
-            sss_in = data_in["sssNor_in"][
+            sss_in = data_in["salinityNor_in"][
                 :,
                 :,
                 self.lat_range[0] : self.lat_range[1],
@@ -609,7 +609,7 @@ class make_TFdataset(Dataset):
             ].values
             tauy_out = np.nan_to_num(tauy_out)
             tauy_out[abs(tauy_out) > 999] = 0
-            sss_out = data_in["sssNor_out"][
+            sss_out = data_in["salinityNor_out"][
                 :,
                 :,
                 self.lat_range[0] : self.lat_range[1],
